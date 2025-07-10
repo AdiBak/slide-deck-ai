@@ -167,12 +167,6 @@ texts = list(GlobalConfig.PPTX_TEMPLATE_FILES.keys())
 captions = [GlobalConfig.PPTX_TEMPLATE_FILES[x]['caption'] for x in texts]
 
 with st.sidebar:
-    # Reset button at the top of sidebar
-    if st.button("🔄 Reset Chat", help="Clear chat history and start a new conversation", use_container_width=True):
-        reset_chat_history()
-    
-    st.markdown("---")  # Separator
-    
     # The PPT templates
     pptx_template = st.sidebar.radio(
         '1: Select a presentation template:',
@@ -259,6 +253,40 @@ def build_ui():
     """
     Display the input elements for content generation.
     """
+    # Reset button positioned in the right area
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col3:
+        if st.button("🔄 Reset Chat", key="reset_button", type="tertiary"):
+            reset_chat_history()
+    
+    st.markdown("""
+        <style>
+        /* Make the horizontal block sticky */
+        div[data-testid="stHorizontalBlock"] {
+            position: sticky !important;
+            top: 60px !important;
+            background-color: rgba(0,0,0,0) !important;
+            z-index: 1000 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            margin-bottom: 0px !important;
+            height: 0px !important;
+        }
+        
+        /* Style the tertiary button */
+        button[kind="tertiary"] {
+            position: relative;
+            top: 0px;
+            width: 100px;
+            right: -230px;
+            background: black !important;
+            color: white !important;
+            border: 0.5px solid white !important;
+            border-radius: 4px !important;
+            font-size: 10px !important;
+            font-weight: 5 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
     st.title(APP_TEXT['app_name'])
     st.subheader(APP_TEXT['caption'])
@@ -316,8 +344,6 @@ def set_up_chat_ui():
         accept_file=True,
         file_type=['pdf', ],
     )
-    
-
 
     if prompt:
         prompt_text = prompt.text or ''
